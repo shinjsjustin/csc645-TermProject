@@ -1,0 +1,11 @@
+<h2>Search Broker</h2>
+<form action="/brokers" method="GET">
+    <label>Name</label>
+    <input type="text" name="name">
+    <button type="submit">Search</button>
+</form>
+<br>
+<%brokers.forEach(broker=>{%>
+    <div>Brokers</div>
+    <div><% broker.name %></div>
+<%})%>

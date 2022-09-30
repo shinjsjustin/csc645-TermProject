@@ -1,0 +1,6 @@
+<h2>Edit Broker</h2>
+<form action="/brokers/<%= broker.id %>?_method=PUT" method="POST">
+    <%- include('_form_fields') %> 
+    <button type="submit">Update</button>
+    <a href="/brokers/<%= broker.id %> ">Cancel</a>
+</form>

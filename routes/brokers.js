@@ -1,7 +1,17 @@
 const express = require('express')
-const broker = require('../models/broker')
 const router = express.Router()
 const Broker = require('../models/broker')
+const bcrypt = require('bcrypt')
+const passport = require('passport')
+const methodOverride = require('method-override')
+const session = require('express-session')
+const initializePassport = require('../passport-config')
+initializePassport(
+    passport,
+    Broker.find({email: email})
+)
+
+router.use(methodOverride('_method'))
 
 //Display all brokers
 router.get('/', async (req,res) =>{
@@ -20,15 +30,18 @@ router.get('/', async (req,res) =>{
     }
 })
 
-// New Broker
+// New Broker page
 router.get('/new', (req,res) =>{
     res.render('brokers/new', {broker: new Broker()})
 })
 
-// Create Broker
-router.post('/', async (req,res) =>{
+// Create Broker on submit
+router.post('/new', async (req,res) =>{
+    const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const broker = new Broker({
-        name: req.body.name
+        name: req.body.name,
+        email: req.body.email,
+        password: hashedPassword
     })
     try{
         const newBroker = await broker.save()
@@ -42,39 +55,49 @@ router.post('/', async (req,res) =>{
     }
 })
 
-router.get('/:id', (req,res)=>{
-    res.send('Show Broker ' + req.params.id)
-})
+//View ID
+// router.get('/:id', (req,res)=>{
+//     res.render('/brokers/login')
+// })
 
-router.get('/:id/edit', async(req,res)=>{
+// Go to login page
+router.get('/:id/login', async(req,res)=>{
     try{
         const broker = await Broker.findById(req.params.id)
-        res.render('brokers/edit', {broker: broker})
+        res.render('brokers/login', {broker: broker})
     }catch{
         res.redirect('/brokers')
 
     }
 })
 
+router.post('/:id/login', checkNotAuthenticated, passport.authenticate('local',{
+    successRedirect:"/home",
+    failureRedirect:'/login',
+    failureFlash: true
+}))
+
+//Update Id
 router.put('/:id', async (req, res)=>{
     let broker
     try{
         broker = await Broker.findById(req.params.id)
         broker.name = req.body.name
         await broker.save()
-        res.redirect(`/brokers/${broker.id}`)
+        res.redirect(`/brokers`)
     }catch{
         if(broker == null){
             res.redirect('/')
         }else{
             res.render('brokers/edit', {
                 broker: broker,
-                errorMessage: 'Error creating broker'
+                errorMessage: 'Error editing broker'
             })
         }
     }
 })
 
+//Delete Id
 router.delete('/:id', async (req,res)=>{
     let broker
     try{
@@ -90,6 +113,18 @@ router.delete('/:id', async (req,res)=>{
     }
 })
 
+function checkAuthenticated(req,res,next){
+    if(req.isAuthenticated()){
+        return next()
+    }
+    res.redirect('/')
+}
 
+function checkNotAuthenticated(req,res,next){
+    if(req.isAuthenticated()){
+        return res.redirect('/')
+    }
+    next()
+}
  
 module.exports = router

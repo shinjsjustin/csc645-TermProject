@@ -4,12 +4,6 @@ const Broker = require('../models/broker')
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 const methodOverride = require('method-override')
-const session = require('express-session')
-const initializePassport = require('../passport-config')
-initializePassport(
-    passport,
-    Broker.find({email: email})
-)
 
 router.use(methodOverride('_method'))
 

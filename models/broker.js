@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const brokerSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },
@@ -9,9 +9,11 @@ const brokerSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    password: {
-        type: String,
-        required: true
+    hash: {
+        type: String
+    },
+    salt: {
+        type: String
     }
 })
 

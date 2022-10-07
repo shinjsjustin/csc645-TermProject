@@ -6,7 +6,7 @@
 </form>
 <br>
 <%brokers.forEach(broker=>{%>
-    <div><%= broker.name %></div>
+    <div>Username: <%= broker.username %></div>
     <a href="/brokers/<%= broker.id %>/login">LogIn</a>
     <form method="POST" action="/brokers/<%= broker.id %>?_method=DELETE">
         <button type="submit">Delete</button>

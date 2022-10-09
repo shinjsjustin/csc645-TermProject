@@ -1,0 +1,25 @@
+<nav>
+    <ul>
+        <li>$<%= broker.netWorth %></li>
+        <li>$<%= broker.liquidCash %></li>
+        <li><a href="/">Loan</a></li>
+        <li><a href="/logout">Log Out</a></li>
+    </ul>
+</nav>
+
+<br>
+<form action="/stocks" method="GET">
+    <label>Name</label>
+    <input type="text" name="stock">
+    <button type="submit">Search</button>
+</form>
+
+<br>
+
+<div class="grid-container" id="theStocks">
+    Needa fill some shit in here
+</div>
+
+<br>
+
+<form action=""

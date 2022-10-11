@@ -1,3 +1,3 @@
 GET http://api.marketstack.com/v1/eod
-    ? access_key = ec588881196c2e9ea6f4ac3b6437830d
-    & symbols = APPL
+    access_key: "ec588881196c2e9ea6f4ac3b6437830d"
+    symbols: "APPL"

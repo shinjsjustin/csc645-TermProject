@@ -1,3 +1,9 @@
-GET http://api.marketstack.com/v1/eod
-    access_key: "ec588881196c2e9ea6f4ac3b6437830d"
-    symbols: "APPL"
+GET https://query1.finance.yahoo.com/v1/finance/trending/US?count=5
+
+###
+
+GET https://query2.finance.yahoo.com/v7/finance/quote?symbols=UBER&fields=exchangeTimezoneName,exchangeTimezoneShortName,regularMarketTime,gmtOffSetMilliseconds&region=US&lang=en-US
+
+###
+
+GET https://query2.finance.yahoo.com/v7/finance/quote?symbols=UBER

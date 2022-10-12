@@ -43,6 +43,7 @@ const homeRouter = require('./routes/home')
 app.use('/', enterRouter) 
 app.use('/home', homeRouter)
 
+
 //All brokers page
 // app.get('/brokers', async (req,res) =>{
 //     let searchOptions = {}

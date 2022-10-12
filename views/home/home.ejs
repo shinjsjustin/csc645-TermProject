@@ -1,3 +1,5 @@
+
+
 <nav>
     <ul>
         <li>$<%= broker.netWorth %></li>
@@ -6,20 +8,22 @@
         <li><a href="/logout">Log Out</a></li>
     </ul>
 </nav>
-
 <br>
-<form action="/stocks" method="GET">
-    <label>Name</label>
-    <input type="text" name="stock">
-    <button type="submit">Search</button>
+<h2>Welcome <%=broker.username%></h2>
+<br>
+<form action="/home/new" method="POST">
+    <label>Stock Name</label>
+    <input id="stockName" type="text" name="stockName" required>
+    <button type="submit">button</button>
 </form>
-
-<br>
-
-<div class="grid-container" id="theStocks">
-    Needa fill some shit in here
-</div>
-
-<br>
-
-<form action=""
+<% stocks.forEach(stock=>{%> 
+    <div id="stockInstance">
+        <ul>
+            <li>Stock: <%= stock.stockName %></li>
+            <li>Price: <%= stock.sharePrice %></li>
+        </ul>
+        <form method="POST" action="/home/delete/<%= stock.id %>?_method=DELETE">
+            <button type="submit">Sell</button>
+        </form>
+    </div>
+<%})%> 

@@ -1,29 +1,34 @@
 
-
-<nav>
-    <ul>
-        <li>$<%= broker.netWorth %></li>
-        <li>$<%= broker.liquidCash %></li>
-        <li><a href="/">Loan</a></li>
-        <li><a href="/logout">Log Out</a></li>
-    </ul>
-</nav>
-<br>
-<h2>Welcome <%=broker.username%></h2>
-<br>
-<form action="/home/new" method="POST">
-    <label>Stock Name</label>
-    <input id="stockName" type="text" name="stockName" required>
-    <button type="submit">button</button>
-</form>
-<% stocks.forEach(stock=>{%> 
-    <div id="stockInstance">
+<div class="nav-container">
+    <nav class="navigation">
         <ul>
-            <li>Stock: <%= stock.stockName %></li>
-            <li>Price: <%= stock.sharePrice %></li>
+            <li>$<%= broker.netWorth %></li>
+            <li>$<%= broker.liquidCash %></li>
+            <li><a href="/">Loan</a></li>
+            <li><a href="/logout">Log Out</a></li>
         </ul>
-        <form method="POST" action="/home/delete/<%= stock.id %>?_method=DELETE">
-            <button type="submit">Sell</button>
-        </form>
-    </div>
-<%})%> 
+    </nav>
+</div>
+<br>
+<h2 class="title">Welcome <%=broker.username%></h2>
+<br>
+<div class="searchContainer">
+    <form action="/home/new" method="POST">
+        <input id="stockName" class="stockSearchBar" type="text" placeholder="Search Stock"name="stockName" required>
+        <button type="submit" class="stockSearchButton">search</button>
+    </form>
+</div>
+<div class="stockContainer">
+    <% stocks.forEach(stock=>{%> 
+        <div class="stockInstance">
+            <ul>
+                <li>Stock: <%= stock.stockName %></li>
+                <li>Price: <%= stock.sharePrice %></li>
+            </ul>
+            <form method="POST" action="/home/delete/<%= stock.id %>?_method=DELETE">
+                <button type="submit" class="sell">Sell</button>
+            </form>
+        </div>
+    <%})%> 
+</div>
+ 

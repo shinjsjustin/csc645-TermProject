@@ -1,0 +1,59 @@
+body{
+    background: linear-gradient(#425F57,#CFFF8D); 
+    margin:0; 
+    height: 100%;
+}
+
+/*
+Entrance 
+*/
+
+.hero{
+    height:100%;
+    width:100%;
+    background-position:center;
+    position:absolute;
+}
+
+.sidekick{
+    width:380px;
+    height:300px;
+    position:relative;
+    margin:6% auto;
+    padding:5px;
+    overflow:hidden;
+    background:#fff;
+    border-radius: 50px;
+}
+
+.title{
+    position:relative;
+    margin:5px auto; 
+    text-align:center
+}
+
+.button{
+    width: 85%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: linear-gradient(#CFFF8D,#425F57);
+    border:0;
+    outline:none;
+    border-radius:30px;
+    margin-top:30px
+}
+
+.swap{
+    width: 75%;
+    padding: 10px 20px;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+    background: linear-gradient(#CFFF8D,#425F57);
+    border:0;outline:none;
+    border-radius:30px;
+    margin-top:20px;
+    text-align: center;
+}

@@ -1,9 +1,11 @@
-<h1>Login</h1>
-<% if (messages.error) { %>
-  <%= messages.error %>
-<% } %>
-<form action="/login" method="POST">
-  <%- include('_form_fields') %>
-  <button type="submit">Login</button>
-  <a href="/register">Register</a>
-</form>
+<div class="hero">
+  <div class="sidekick">
+    <h1 class="title">Login</h1>
+    <form action="/login" method="POST">
+      <%- include('_form_fields') %>
+      <button type="submit" class="button">Login</button>
+      <a href="/register" class="swap">Register</a>
+    </form>
+  </div>
+</div>
+

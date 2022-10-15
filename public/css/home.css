@@ -1,0 +1,86 @@
+.nav-container{
+    height: 50px;
+    position: relative;
+    margin:0 auto;
+    text-align: center;
+}
+
+.navigation{
+    position:relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    padding-top: 20px;
+}
+
+.navigation ul{
+    display: flex;
+    width: 350px;
+}
+
+.navigation ul li{
+    position: relative;
+    list-style: none;
+    width: 70px;
+    height: 70px;
+    z-index: 1;
+}
+
+.searchContainer{
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    position: relative;
+    padding: 10px;
+    margin:0 auto;
+}
+
+.stockSearchBar{
+    margin:0 auto;
+}
+
+.stockSearchButton{
+    padding: 10px 10px;
+    cursor: pointer;
+    background: linear-gradient(#CFFF8D,#425F57);
+    border:0;
+    outline:none;
+    border-radius:30px;
+}
+
+.stockContainer{
+    align-items: center;
+    justify-content: center;
+    display:flex;
+    position:relative;
+    padding:10px;
+    margin:0 auto;
+}
+
+.stockInstance{
+    padding: 10px;
+    border: 2px solid blue;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 10px;
+}
+
+.stockInstance ul{
+    list-style: none;
+    align-items: center;
+    justify-content: center;
+    display:block;
+}
+
+.stockInstance ul li{
+    margin-right: 20px;
+    margin-left: -20px;
+}
+
+.sell{
+    margin-left:40px;
+    align-items: center;
+    justify-content: center;
+    display:block;
+}

@@ -1,6 +1,10 @@
-<h2>New Broker</h2>
-<form action="/register" method="POST">
-    <%- include('_form_fields') %> 
-    <button type="submit">Create</button>
-    <a href="/login">Log In</a>
-</form>
+<div class="hero">
+    <div class="sidekick">
+      <h1 class="title">Register</h1>
+      <form action="/register" method="POST">
+        <%- include('_form_fields') %>
+        <button type="submit" class="button">Register</button>
+        <a href="/login" class="swap">Login</a>
+      </form>
+    </div>
+  </div>

@@ -8,24 +8,27 @@ const WebSocket = require('isomorphic-ws')
 const protobuf = require('protobufjs') 
 const {Buffer} = require('buffer/')
 const ws = new WebSocket('wss://streamer.finance.yahoo.com')
+protobuf.load('./config/YPricingData.proto', (error, root)=>{
+    if(error){return console.log(error)}
+    const YaTicker = root.lookupType('yaticker')
+    ws.onopen = function open(){
+        console.log('connected')
+        ws.send(JSON.stringify({
+            subscribe: ['symbol']
+        }))
+    }
+    ws.onclose = function close(){
+        // console.log('disconnected')
+    }
+    ws.onmessage = function incoming(message){
+        // console.log('comming message')
+        //return YaTicker.decode(new Buffer(message.data,'base64'))
+        console.log(YaTicker.decode(new Buffer(message.data,'base64')))
+    }
+})
 
-// protobuf.load('./config/YPricingData.proto', (error, root)=>{
-//     if(error){return console.log(error)}
-//     const YaTicker = root.lookupType('yaticker')
-//     ws.onopen = function open(){
-//         console.log('connected')
-//         ws.send(JSON.stringify({
-//             subscribe: ['TSLA']
-//         }))
-//     }
-//     ws.onclose = function close(){
-//         console.log('disconnected')
-//     }
-//     ws.onmessage = function incoming(message){
-//         console.log('comming message')
-//         console.log(YaTicker.decode(new Buffer(message.data,'base64')))
-//     }
-// })
+const url = 'https://query2.finance.yahoo.com/v7/finance/quote?symbols='
+
 
 
 router.get('/', isAuth, async(req,res)=>{
@@ -50,29 +53,70 @@ router.get('/', isAuth, async(req,res)=>{
 })
 
 router.post('/new', async(req,res)=>{
-    const stonk = new Stock({
-        stockName: req.body.stockName,
-        ownedBy: req.user.username,
-        numShares: 5,
-        sharePrice: 10,
-        boughtOn: new Date()
-    })
-    try{
-        await stonk.save()
-        res.redirect('/')
-    }catch{
-        res.send('error creating stock')
-    }
+    const name = req.body.stockName
+    const money = req.body.moneySpent
+    var stonk
+    var price
+    var volume
+    var time
+    var u = url + name
+    fetch(u,{method:"GET"})
+        .then((response)=>{
+            return response.json()
+        })
+        .then(async (data)=>{
+            price = (data.quoteResponse.result[0].postMarketPrice).toFixed(2)
+            volume = data.quoteResponse.result[0].regularMarketVolume
+            time = data.quoteResponse.result[0].regularMarketTime
+            stonk = new Stock({
+                symbol: req.body.stockName,
+                ownedBy: req.user.username,
+                volume: volume,
+                price: price,
+                time: time,
+                money: money
+            })
+
+            try{
+                req.user.liquidCash = req.user.liquidCash - money
+                await req.user.save()
+                await stonk.save()
+                res.redirect('/')
+            }catch{
+                res.send('error creating stock')
+            }
+        })
+    
+    
 })
 
 router.delete('/delete/:id', async(req,res)=>{
-    let stock
+    var stock, volume, u, price, money, v, p, c
     try{
         stock = await Stock.findById(req.params.id)
-        await stock.remove()
-        res.redirect('/')
+        u = url + stock.symbol
+        money = stock.money
+        price = stock.price
+        volume = stock.volume
+        fetch(u,{method:"GET"})
+        .then((response)=>{
+            return response.json()
+        })
+        .then(async (data)=>{
+            p = (data.quoteResponse.result[0].postMarketPrice).toFixed(2)
+            v = data.quoteResponse.result[0].regularMarketVolume
+            c = p*v*money/p/v
+            req.user.liquidCash = req.user.liquidCash + c
+            await req.user.save()
+            await stock.remove()
+            res.redirect('/')
+        })
+        .catch((e)=>{
+            console.log(e)
+        })
+        
     }catch{
-        res.send('error deleting stock')
+        res.send('Could not sell')
     }
 })
 

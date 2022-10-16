@@ -15,15 +15,20 @@
 <div class="searchContainer">
     <form action="/home/new" method="POST">
         <input id="stockName" class="stockSearchBar" type="text" placeholder="Search Stock"name="stockName" required>
+        <input id="moneySpent" type="number" name="moneySpent" placeholder="Dollar Amount" required min="0" max="<%=broker.liquidCash%>">
         <button type="submit" class="stockSearchButton">search</button>
     </form>
 </div>
 <div class="stockContainer">
     <% stocks.forEach(stock=>{%> 
         <div class="stockInstance">
-            <ul>
-                <li>Stock: <%= stock.stockName %></li>
-                <li>Price: <%= stock.sharePrice %></li>
+            <ul id="stockList">
+                <li>Stock: <%= stock.symbol %></li>
+                <li>Price: <%= stock.price %></li>
+                <li>Invested: <%= stock.money %></li>
+                <li>Volume: <%= stock.volume %></li>
+                <li>Time: <%= stock.time %></li>
+                <li id="live<%=stock.symbol%>"></li>
             </ul>
             <form method="POST" action="/home/delete/<%= stock.id %>?_method=DELETE">
                 <button type="submit" class="sell">Sell</button>
@@ -31,4 +36,7 @@
         </div>
     <%})%> 
 </div>
- 
+
+<div class="liveContainer" id="liveContainer">
+
+</div>

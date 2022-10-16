@@ -34,21 +34,24 @@ const brokerSchema = new mongoose.Schema({
 const Broker = connection.model('Broker', brokerSchema)
 
 const stockSchema = new mongoose.Schema({
-    stockName: {
+    symbol: {
         type: String
     },
     ownedBy: {
         type: String
     }, 
-    numShares: {
+    volume: {
         type: Number
     },
-    sharePrice: {
+    price: {
         type: Number
     },
-    boughtOn: {
-        type: Date
+    time: {
+        type: Number
     },
+    money:{
+        type: Number
+    }
 })
 
 const Stock = connection.model('Stock', stockSchema)

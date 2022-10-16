@@ -14,7 +14,8 @@ connection.once('open', () => console.log('Connected to Database'))
 const brokerSchema = new mongoose.Schema({
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     hash: {
         type: String

@@ -22,22 +22,33 @@ router.post('/login', passport.authenticate('local',{
 })
 
 router.post('/register', async (req,res) =>{
-    const saltHash = genPassword(req.body.password)
-    const salt = saltHash.salt;
-    const hash = saltHash.hash;
-
-    const broker = new Broker({
-        username: req.body.username,
-        hash: hash,
-        salt: salt,
-        netWorth: 10000,
-        liquidCash: 10000
-    })
+    var u = req.body.username
+    var count
     try{
-        const newBroker = await broker.save()
-        res.redirect('/login')
+        count = await Broker.countDocuments({username:u})
+        if(count > 0){
+            res.send('username exists, try again')
+        }else{
+            const saltHash = genPassword(req.body.password)
+            const salt = saltHash.salt;
+            const hash = saltHash.hash;
+    
+            const broker = new Broker({
+                username: u,
+                hash: hash,
+                salt: salt,
+                netWorth: 10000,
+                liquidCash: 10000
+            })
+            try{
+                await broker.save()
+                res.redirect('/login')
+            }catch{
+                res.send("Error creating user")
+            }
+        }
     }catch{
-        res.send("Error creating user")
+        res.send("somethings fucked")
     }
 })
 

@@ -6,4 +6,4 @@ GET https://query2.finance.yahoo.com/v7/finance/quote?symbols=UBER&fields=exchan
 
 ###
 
-GET https://query2.finance.yahoo.com/v7/finance/quote?symbols=UBER
+GET https://query2.finance.yahoo.com/v7/finance/quote?symbols=AAAA

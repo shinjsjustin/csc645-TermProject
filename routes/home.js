@@ -14,14 +14,13 @@ protobuf.load('./config/YPricingData.proto', (error, root)=>{
     ws.onopen = function open(){
         console.log('connected')
         ws.send(JSON.stringify({
-            subscribe: ['symbol']
+            subscribe: ['TSLA']
         }))
     }
     ws.onclose = function close(){
-        // console.log('disconnected')
     }
     ws.onmessage = function incoming(message){
-        // console.log('comming message')
+
         //return YaTicker.decode(new Buffer(message.data,'base64'))
         console.log(YaTicker.decode(new Buffer(message.data,'base64')))
     }
@@ -29,21 +28,13 @@ protobuf.load('./config/YPricingData.proto', (error, root)=>{
 
 const url = 'https://query2.finance.yahoo.com/v7/finance/quote?symbols='
 
+// const ttt = document.getElementById("testtt")
+
 
 
 router.get('/', isAuth, async(req,res)=>{
+
     let broker = req.user
-    // const url = 'https://query2.finance.yahoo.com/v7/finance/quote?symbols=UBER'
-    // fetch(url,{method:"GET"})
-    //     .then((response)=>{
-    //         console.log(response)
-    //         return response.json()
-    //     })
-    //     .then((data)=>{
-    //         console.log(data)
-    //         let x = data.quoteResponse.result[0].postMarketPrice
-    //         console.log("!!!" + x + "!!!")
-    //     })
     try{
         const stocks = await Stock.find({'ownedBy':broker.username})
         res.render('home/home',{broker: broker, stocks: stocks})
@@ -86,8 +77,10 @@ router.post('/new', async(req,res)=>{
                 res.send('error creating stock')
             }
         })
-    
-    
+        .catch((err)=>{
+            console.log(err)
+            res.redirect('/')
+        })
 })
 
 router.delete('/delete/:id', async(req,res)=>{
@@ -105,7 +98,7 @@ router.delete('/delete/:id', async(req,res)=>{
         .then(async (data)=>{
             p = (data.quoteResponse.result[0].postMarketPrice).toFixed(2)
             v = data.quoteResponse.result[0].regularMarketVolume
-            c = p*v*money/p/v
+            c = p*v*money/price/volume
             req.user.liquidCash = req.user.liquidCash + c
             await req.user.save()
             await stock.remove()

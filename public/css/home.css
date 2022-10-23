@@ -50,19 +50,19 @@
 }
 
 .stockContainer{
-    align-items: center;
     justify-content: center;
     display:flex;
-    position:relative;
-    padding:10px;
-    margin:0 auto;
+    flex-wrap: wrap;
 }
 
 .stockInstance{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
     padding: 10px;
     border: 2px solid blue;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: 10px;
     border-radius: 10px;
 }
 
@@ -78,9 +78,5 @@
     margin-left: -20px;
 }
 
-.sell{
-    margin-left:40px;
-    align-items: center;
-    justify-content: center;
-    display:block;
-}
+/* .sell{
+} */

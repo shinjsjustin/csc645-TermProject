@@ -22,8 +22,8 @@
 <div class="stockContainer">
     <% stocks.forEach(stock=>{%> 
         <div class="stockInstance">
-            <ul id="stockList">
-                <li>Stock: <%= stock.symbol %></li>
+            <ul id="stockList" class="stockList">
+                <li class="stockSymbol"><%= stock.symbol %></li>
                 <li>Price: <%= stock.price %></li>
                 <li>Invested: <%= stock.money %></li>
                 <li>Volume: <%= stock.volume %></li>
@@ -37,6 +37,3 @@
     <%})%> 
 </div>
 
-<div class="liveContainer" id="liveContainer">
-
-</div>

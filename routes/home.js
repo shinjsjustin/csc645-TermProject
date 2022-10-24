@@ -4,29 +4,29 @@ const Broker = connection.models.Broker
 const Stock = connection.models.Stock
 const isAuth = require('./authMiddleware').isAuth
 
-const WebSocket = require('isomorphic-ws')
-const protobuf = require('protobufjs') 
-const {Buffer} = require('buffer/')
-const ws = new WebSocket('wss://streamer.finance.yahoo.com')
-protobuf.load('./config/YPricingData.proto', (error, root)=>{
-    if(error){return console.log(error)}
-    const YaTicker = root.lookupType('yaticker')
-    ws.onopen = function open(){
-        console.log('connected')
-        ws.send(JSON.stringify({
-            subscribe: ['TSLA']
-        }))
-    }
-    ws.onclose = function close(){
-    }
-    ws.onmessage = function incoming(message){
+// const WebSocket = require('isomorphic-ws')
+// const protobuf = require('protobufjs') 
+// const {Buffer} = require('buffer/')
+// const ws = new WebSocket('wss://streamer.finance.yahoo.com')
+// protobuf.load('./config/YPricingData.proto', (error, root)=>{
+//     if(error){return console.log(error)}
+//     const YaTicker = root.lookupType('yaticker')
+//     ws.onopen = function open(){
+//         console.log('connected')
+//         ws.send(JSON.stringify({
+//             subscribe: ['TSLA']
+//         }))
+//     }
+//     ws.onclose = function close(){
+//     }
+//     ws.onmessage = function incoming(message){
 
-        //return YaTicker.decode(new Buffer(message.data,'base64'))
-        console.log(YaTicker.decode(new Buffer(message.data,'base64')))
-    }
-})
+//         //return YaTicker.decode(new Buffer(message.data,'base64'))
+//         console.log(YaTicker.decode(new Buffer(message.data,'base64')))
+//     }
+// })
 
-const url = 'https://query2.finance.yahoo.com/v7/finance/quote?symbols='
+const url = process.env.FINANCE_URL
 
 // const ttt = document.getElementById("testtt")
 
@@ -56,7 +56,7 @@ router.post('/new', async(req,res)=>{
             return response.json()
         })
         .then(async (data)=>{
-            price = (data.quoteResponse.result[0].postMarketPrice).toFixed(2)
+            price = (data.quoteResponse.result[0].regularMarketPrice).toFixed(2)
             volume = data.quoteResponse.result[0].regularMarketVolume
             time = data.quoteResponse.result[0].regularMarketTime
             stonk = new Stock({
@@ -96,7 +96,7 @@ router.delete('/delete/:id', async(req,res)=>{
             return response.json()
         })
         .then(async (data)=>{
-            p = (data.quoteResponse.result[0].postMarketPrice).toFixed(2)
+            p = (data.quoteResponse.result[0].regularMarketPrice).toFixed(2)
             v = data.quoteResponse.result[0].regularMarketVolume
             c = p*v*money/price/volume
             req.user.liquidCash = req.user.liquidCash + c

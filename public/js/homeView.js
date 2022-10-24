@@ -1,42 +1,67 @@
-const socket = new WebSocket('wss://streamer.finance.yahoo.com')
-//import "YPricingData.proto"
-//import protobuf from 'protobufjs'
+var stockSymbols = []
+const symbols = window.document.getElementsByClassName('stockSymbol')
+for(var s of symbols){
+    stockSymbols.push(s.innerHTML)
+}
+console.log(stockSymbols)
 
-async function decodeM(buffer){
-    const root = await protobuf.load("YPricingData.proto")
-    const testMessage = root.lookupType('yaticker')
-    const err = testMessage.verify(buffer);
-    if(err){
-        throw err;
+const socket = new WebSocket('wss://streamer.finance.yahoo.com')
+// const root = protobuf.load('/YPricingData.proto')
+// const yaticker = root.lookupType('yaticker')
+
+protobuf.load('YPricingData.proto',(err, root)=>{
+    if(err){return console.log(err)}
+    const YaTicker = root.lookupType('yaticker')
+
+    socket.onopen = function open(){
+        console.log('connected')
+        socket.send(JSON.stringify({
+            subscribe: stockSymbols
+        }))
     }
-    const message = testMessage.decode(buffer);
-    return testMessage.toObject(message)
+    socket.onmessage = function incomming(message){
+        console.log('incoming')
+        const d = YaTicker.decode(buffer.Buffer.from(message.data, 'base64'))
+        console.log(d.id)
+        console.log(d.price)
+        updateWindow(d.id, d.price)
+    }
+})
+
+function updateWindow(id, price){
+    let p = price.toFixed(2)
+    const y = window.document.getElementById(id)
+    let x = y.innerHTML
+    console.log(x + ", " + p)
+    y.innerHTML = p
+    if(x > p){
+        y.parentElement.closest('div').style.borderColor = 'red'
+    }else{
+        y.parentElement.closest('div').style.borderColor = 'green'
+    }
 }
 
-// const x = window.document.getElementById('testtt')
-// x.innerHTML = "HELLLLLLLLO"
+
+
+
 
 // const y = window.document.getElementsByClassName('stockList')
 // console.log(y)
 // for(const child of y[0]){
 //     console.log(child)
 // }
-var stockSymbols = []
-const symbols = window.document.getElementsByClassName('stockSymbol')
-for(var s of symbols){
-    stockSymbols.push(s.innerHTML)
-}
 
 
-socket.addEventListener('open',function(event){
-    console.log("connected to websocket")
-    socket.send(JSON.stringify({
-        subscribe:stockSymbols
-    }))
-})
 
-socket.addEventListener('message', function(message){
-    console.log('incoming')
-    console.log(decodeM(message.data))
-})
+// socket.addEventListener('open',function(event){
+//     console.log("connected to websocket")
+//     socket.send(JSON.stringify({
+//         subscribe:stockSymbols
+//     }))
+// })
+
+// socket.addEventListener('message', function(message){
+//     console.log('incoming')
+//     console.log(decodeM(message.data))
+// })
 

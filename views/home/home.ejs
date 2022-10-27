@@ -24,10 +24,9 @@
         <div class="stockInstance">
             <ul id="stockList" class="stockList">
                 <li class="stockSymbol"><%= stock.symbol %></li>
-                <li id="<%=stock.symbol%>">Price: <%= stock.price %></li>
+                <li id="<%=stock.symbol%>"></li>
+                <li>Bought At: <%= stock.price %></li>
                 <li>Invested: <%= stock.money %></li>
-                <li>Volume: <%= stock.volume %></li>
-                <li>Time: <%= stock.time %></li>
                 <li id="live<%=stock.symbol%>"></li>
             </ul>
             <form method="POST" action="/home/delete/<%= stock.id %>?_method=DELETE">

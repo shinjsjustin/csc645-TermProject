@@ -40,28 +40,3 @@ function updateWindow(id, price){
         y.parentElement.closest('div').style.borderColor = 'green'
     }
 }
-
-
-
-
-
-// const y = window.document.getElementsByClassName('stockList')
-// console.log(y)
-// for(const child of y[0]){
-//     console.log(child)
-// }
-
-
-
-// socket.addEventListener('open',function(event){
-//     console.log("connected to websocket")
-//     socket.send(JSON.stringify({
-//         subscribe:stockSymbols
-//     }))
-// })
-
-// socket.addEventListener('message', function(message){
-//     console.log('incoming')
-//     console.log(decodeM(message.data))
-// })
-

@@ -79,7 +79,7 @@ router.post('/new', async(req,res)=>{
         })
         .catch((err)=>{
             console.log(err)
-            res.redirect('/')
+            res.send('error finding stock')
         })
 })
 
@@ -96,10 +96,10 @@ router.delete('/delete/:id', async(req,res)=>{
             return response.json()
         })
         .then(async (data)=>{
-            p = (data.quoteResponse.result[0].regularMarketPrice).toFixed(2)
+            p = data.quoteResponse.result[0].regularMarketPrice
             v = data.quoteResponse.result[0].regularMarketVolume
             c = p*v*money/price/volume
-            req.user.liquidCash = req.user.liquidCash + c
+            req.user.liquidCash = req.user.liquidCash + c.toFixed(2)
             await req.user.save()
             await stock.remove()
             res.redirect('/')

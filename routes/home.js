@@ -78,8 +78,9 @@ router.post('/new', async(req,res)=>{
             }
         })
         .catch((err)=>{
+            let s = 'error finding stock' + '\n' + u + '\n' + response + '\n' + data
             console.log(err)
-            res.send('error finding stock')
+            res.send(s)
         })
 })
 

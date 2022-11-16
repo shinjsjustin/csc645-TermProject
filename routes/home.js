@@ -50,7 +50,7 @@ router.post('/new', async(req,res)=>{
     var price
     var volume
     var time
-    var u = url + name
+    var u = process.env.FINANCE_URL + name
     fetch(u,{method:"GET"})
         .then((response)=>{
             return response.json()

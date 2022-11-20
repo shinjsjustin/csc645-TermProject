@@ -15,7 +15,7 @@ module.exports.isNotAuth = (req,res,next)=>{
 }
 
 module.exports.isAdmin = (req, res, next) => {
-    if (req.isAuthenticated() && req.user.admin) {
+    if (req.isAuthenticated() && req.user.username == "JShin") {
         next();
     } else {
         res.status(401).json({ msg: 'You are not authorized to view this resource because you are not an admin.' });

@@ -40,8 +40,10 @@ require('./config/passport')
 
 const enterRouter = require('./routes/enter')
 const homeRouter = require('./routes/home')
+const adminRouter = require('./routes/admin')
 app.use('/', enterRouter) 
 app.use('/home', homeRouter)
+app.use('/admin', adminRouter)
 
 
 //All brokers page

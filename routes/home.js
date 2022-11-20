@@ -2,6 +2,7 @@ const router = require('express').Router()
 const connection = require('../config/database')
 const Broker = connection.models.Broker
 const Stock = connection.models.Stock
+const Loan = connection.models.Loan
 const isAuth = require('./authMiddleware').isAuth
 
 // const WebSocket = require('isomorphic-ws')
@@ -28,12 +29,7 @@ const isAuth = require('./authMiddleware').isAuth
 
 const url = process.env.FINANCE_URL
 
-// const ttt = document.getElementById("testtt")
-
-
-
 router.get('/', isAuth, async(req,res)=>{
-
     let broker = req.user
     try{
         const stocks = await Stock.find({'ownedBy':broker.username})
@@ -50,7 +46,7 @@ router.post('/new', async(req,res)=>{
     var price
     var volume
     var time
-    var u = process.env.FINANCE_URL + name
+    var u = "https://query2.finance.yahoo.com/v7/finance/quote?symbols=" + name
     fetch(u,{method:"GET"})
         .then((response)=>{
             return response.json()
@@ -69,7 +65,7 @@ router.post('/new', async(req,res)=>{
             })
 
             try{
-                req.user.liquidCash = req.user.liquidCash - money
+                req.user.liquidCash = (req.user.liquidCash - money).toFixed(2)
                 await req.user.save()
                 await stonk.save()
                 res.redirect('/')
@@ -78,9 +74,8 @@ router.post('/new', async(req,res)=>{
             }
         })
         .catch((err)=>{
-            let s = 'error finding stock' + '\n' + u + '\n' + response + '\n' + data
             console.log(err)
-            res.send(s)
+            res.send('error finding stock')
         })
 })
 
@@ -100,7 +95,7 @@ router.delete('/delete/:id', async(req,res)=>{
             p = data.quoteResponse.result[0].regularMarketPrice
             v = data.quoteResponse.result[0].regularMarketVolume
             c = p*v*money/price/volume
-            req.user.liquidCash = req.user.liquidCash + c.toFixed(2)
+            req.user.liquidCash = (req.user.liquidCash + c).toFixed(2)
             await req.user.save()
             await stock.remove()
             res.redirect('/')
@@ -111,6 +106,33 @@ router.delete('/delete/:id', async(req,res)=>{
         
     }catch{
         res.send('Could not sell')
+    }
+})
+
+router.get('/loan', isAuth, async(req,res)=>{
+    try{
+        const loans = await Loan.find({'givenTo':req.user.username})
+        res.render('home/loan',{loans: loans})
+    }catch{
+        res.send('loan get error')
+    }
+})
+
+router.post('/loan', isAuth, async(req,res)=>{
+    const LName = req.body.LName
+    const LAmount = parseFloat(req.body.LAmount)
+    var loan = new Loan({
+        lName: LName,
+        lAmount: LAmount,
+        givenTo: req.user.username
+    })
+    try{
+        req.user.liquidCash = (req.user.liquidCash + LAmount).toFixed(2)
+        await req.user.save()
+        await loan.save()
+        res.redirect('/')
+    }catch{
+        res.send('Error saving')
     }
 })
 

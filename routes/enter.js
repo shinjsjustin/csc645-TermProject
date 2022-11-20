@@ -11,7 +11,7 @@ const isNotAuth = require('./authMiddleware').isNotAuth
 
 router.post('/login', passport.authenticate('local',{
     failureRedirect:'/login-failure',
-    successRedirect:"/login-success", //Going to be '/brokers/:id'
+    successRedirect:"/login-success",
     failureFlash: true
 }),(err,req,res,next)=>{
     console.log(req.body)
@@ -83,7 +83,11 @@ router.get('/logout', isAuth,(req, res, next) => {
 })
 
 router.get('/login-success', isAuth, async (req, res, next) => {
-    res.redirect('/home')
+    if(req.user.username == 'JShin'){
+        res.redirect('/admin')
+    }else{
+        res.redirect('/home')
+    }
 })
 
 router.get('/login-failure', (req, res, next) => {

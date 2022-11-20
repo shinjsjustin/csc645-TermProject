@@ -39,7 +39,8 @@ const stockSchema = new mongoose.Schema({
         type: String
     },
     ownedBy: {
-        type: String
+        type: String,
+        required: true
     }, 
     volume: {
         type: Number
@@ -56,5 +57,21 @@ const stockSchema = new mongoose.Schema({
 })
 
 const Stock = connection.model('Stock', stockSchema)
+
+const loanSchema = new mongoose.Schema({
+    lName:{
+        type: String,
+    },
+    lAmount:{
+        type: Number,
+        required: true,
+    },
+    givenTo:{
+        type: String,
+        required: true
+    }
+})
+
+const Loan = connection.model('Loan', loanSchema)
 
 module.exports = connection

@@ -20,10 +20,10 @@ protobuf.load('YPricingData.proto',(err, root)=>{
         }))
     }
     socket.onmessage = function incomming(message){
-        console.log('incoming')
+        // console.log('incoming')
         const d = YaTicker.decode(buffer.Buffer.from(message.data, 'base64'))
-        console.log(d.id)
-        console.log(d.price)
+        // console.log(d.id)
+        // console.log(d.price)
         updateWindow(d.id, d.price)
     }
 })
@@ -32,7 +32,7 @@ function updateWindow(id, price){
     let p = price.toFixed(2)
     const y = window.document.getElementById(id)
     let x = y.innerHTML
-    console.log(x + ", " + p)
+    // console.log(x + ", " + p)
     y.innerHTML = p
     if(x > p){
         y.parentElement.closest('div').style.borderColor = 'red'
